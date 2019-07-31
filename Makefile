@@ -1,15 +1,10 @@
 #!/usr/bin/env make
 
-# execute fib with parameters:
-#
-#   make ARGS="-i 12 -s 12" exec
-
 .PHONY:	all bench build check clean cleanall doc exec ghci install lint setup style tags test
 
 TARGET	:= userapp-exe
 SUBS	:= $(wildcard */)
 SRCS	:= $(wildcard $(addsuffix *.hs, $(SUBS)))
-RTSOPTS	?= +RTS -N1
 
 ARGS	?= 'testuser testpassword'
 
@@ -30,19 +25,20 @@ lint:
 	@hlint --color $(SRCS)
 
 build:
-	@stack build --pedantic --no-test --ghc-options='-O2'
+	@stack build
 
 test:
-	@stack test --coverage --test-arguments '$(RTSOPTS)'
+	@stack test
 
 exec:
-	@echo $(ARGS) | stack exec -- $(TARGET) $(RTSOPTS) -s
-
-bench:
-	@stack bench --benchmark-arguments '-o .stack-work/benchmark.html $(RTSOPTS)'
+	@echo $(ARGS) | stack exec -- $(TARGET) -s
 
 doc:
+	@stack test --coverage
 	@stack haddock
+
+bench:
+	@stack bench --benchmark-arguments '-o .stack-work/benchmark.html'
 
 install:
 	@stack install --local-bin-path $(HOME)/bin
@@ -55,9 +51,6 @@ setup:
 
 ghci:
 	@stack ghci --ghci-options -Wno-type-defaults
-
-jupyter:
-	@stack exec jupyter -- notebook
 
 clean:
 	@stack clean
