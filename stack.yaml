@@ -1,0 +1,8 @@
+resolver: lts-12.26
+flags: {}
+allow-newer: false
+packages:
+  - .
+extra-deps:
+arch: x86_64
+system-ghc: true

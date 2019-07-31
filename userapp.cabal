@@ -1,0 +1,44 @@
+name:                  userapp
+version:               0.1.0.0
+-- synopsis:
+-- description:
+homepage:              https://github.com/frankhjung/userapp#readme
+license:               BSD3
+license-file:          LICENSE
+author:                Frank H Jung
+maintainer:            frankhjung@linux.com
+copyright:             Copyright © 2019 Frank H Jung
+category:              education
+build-type:            Simple
+extra-source-files:    README.md
+cabal-version:         >=1.10
+
+executable userapp-exe
+  default-language:    Haskell2010
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base == 4.11.1.0
+                     , userapp
+
+library
+  default-language:    Haskell2010
+  hs-source-dirs:      src
+  ghc-options:         -Wall
+  exposed-modules:     Lib
+  build-depends:       base == 4.11.1.0
+
+test-suite userapp-test
+  default-language:    Haskell2010
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base == 4.11.1.0
+                     , HUnit == 1.6.0.0
+                     , userapp
+
+source-repository head
+  type:                git
+  location:            https://github.com/frankhjung/userapp
+
