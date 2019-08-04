@@ -25,7 +25,7 @@ lint:
 	@hlint --color $(SRCS)
 
 build:
-	@stack build
+	@stack build --pedantic --no-test --ghc-options='-O2'
 
 test:
 	@stack test

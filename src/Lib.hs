@@ -1,3 +1,5 @@
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+
 module Lib
         (
           -- * Data Types
@@ -20,43 +22,45 @@ module Lib
 --
 -- Installed HUnit-1.6.0.0 with Cabal
 
-import           Data.Char (isAlphaNum)
+import           Data.Char       (isAlphaNum)
+import           Data.Validation (Validation (..))
 
 newtype Username = Username String deriving (Eq, Show)
 newtype Password = Password String deriving (Eq, Show)
-newtype Error = Error String deriving (Eq, Show)
+newtype Error = Error [String] deriving (Eq, Show, Semigroup)
+
+-- instance Semigroup Error where
+--  Error xs <> Error ys = Error (xs <> ys)
 
 data User = User Username Password deriving (Eq, Show)
 
-makeUser :: Username -> Password -> Either Error User
+makeUser :: Username -> Password -> Validation Error User
 makeUser username password =
-    User <$> validateUsername username <*> validatePassword password
+  User <$> validateUsername username <*> validatePassword password
 
-cleanWhitespace :: String -> Either Error String
-cleanWhitespace "" = Left (Error "Value cannot be empty")
-cleanWhitespace xs = Right (filter (/= ' ') xs)
+cleanWhitespace :: String -> Validation Error String
+cleanWhitespace "" = Failure (Error ["Value cannot be empty"])
+cleanWhitespace xs = Success (filter (/= ' ') xs)
 
-requireAlphaNum :: String -> Either Error String
+requireAlphaNum :: String -> Validation Error String
 requireAlphaNum xs
-  | all isAlphaNum xs = Right xs
-  | otherwise = Left (Error "Value cannot contain special characters")
+  | all isAlphaNum xs = Success xs
+  | otherwise = Failure (Error ["Value cannot contain special characters"])
 
-checkLength :: Int -> String -> Either Error String
+checkLength :: Int -> String -> Validation Error String
 checkLength maxlength input
-  | length input <= maxlength = Right input
-  | otherwise = Left (Error ("Value too long, can not exceed " ++ show maxlength))
+  | length input <= maxlength = Success input
+  | otherwise = Failure (Error ["Value too long, can not exceed " ++ show maxlength])
 
-validatePassword :: Password -> Either Error Password
+validatePassword :: Password -> Validation Error Password
 validatePassword (Password password) =
-  cleanWhitespace password >>=
-  requireAlphaNum >>=
-  checkLength 20 >>=
-  \p -> Right (Password p)
+  case cleanWhitespace password of
+    Failure err -> Failure err
+    Success p   -> requireAlphaNum p *> checkLength 15 p *> Success (Password p)
 
-validateUsername :: Username -> Either Error Username
+validateUsername :: Username -> Validation Error Username
 validateUsername (Username username) =
-  cleanWhitespace username >>=
-  requireAlphaNum >>=
-  checkLength 10 >>=
-  \u -> Right (Username u)
+  case cleanWhitespace username of
+    Failure err -> Failure err
+    Success u   -> requireAlphaNum u *> checkLength 10 u *> Success (Username u)
 
