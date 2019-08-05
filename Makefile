@@ -6,10 +6,11 @@ TARGET	:= userapp-exe
 SUBS	:= $(wildcard */)
 SRCS	:= $(wildcard $(addsuffix *.hs, $(SUBS)))
 
-ARGS	?= 'testuser testpassword'
+GOOD_ARGS	?= 'testuser testpassword'
+BAD_ARGS	?= 'test%user test@password'
 
 .PHONY: default
-default:	check build test
+default:	check build test exec
 
 all:	check build test doc exec
 
@@ -31,7 +32,12 @@ test:
 	@stack test
 
 exec:
-	@echo $(ARGS) | stack exec -- $(TARGET) -s
+	@echo
+	@echo With good parameters ...
+	@echo $(GOOD_ARGS) | stack exec -- $(TARGET) -s
+	@echo
+	@echo With bad parameters ...
+	@echo $(BAD_ARGS) | stack exec -- $(TARGET) -s
 
 doc:
 	@stack test --coverage

@@ -14,10 +14,9 @@ import qualified Data.Text    as T (words)
 import qualified Data.Text.IO as TIO (getLine)
 import           Lib
 
--- | Usage: echo password | runhaskell fsih0501.hs
 -- To run with args:
 --
--- > echo username password | runhaskell fsih0701.hs
+-- > echo username password | stack exec -- userapp-exe
 main :: IO ()
 main = T.words <$> TIO.getLine >>=
-  \[username, password] -> print $ makeUser (Username username) (Password password)
+  \[username, password] -> display (Username username) (Password password)
