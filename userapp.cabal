@@ -19,6 +19,7 @@ executable userapp-exe
   main-is:             Main.hs
   ghc-options:         -Wall -O2
   build-depends:       base == 4.12.0.0
+                     , text == 1.2.3.1
                      , userapp
 
 library
@@ -27,6 +28,7 @@ library
   ghc-options:         -Wall
   exposed-modules:     Lib
   build-depends:       base == 4.12.0.0
+                     , text == 1.2.3.1
                      , validation == 1
 
 test-suite userapp-test
@@ -37,6 +39,7 @@ test-suite userapp-test
   ghc-options:         -Wall
   build-depends:       base == 4.12.0.0
                      , HUnit == 1.6.0.0
+                     , text == 1.2.3.1
                      , validation == 1
                      , userapp
 

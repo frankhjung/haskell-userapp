@@ -1,4 +1,5 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE OverloadedStrings          #-}
 
 module Lib
         (
@@ -23,11 +24,13 @@ module Lib
 -- Installed HUnit-1.6.0.0 with Cabal
 
 import           Data.Char       (isAlphaNum)
+import           Data.Text       (Text)
+import qualified Data.Text       as T (all, filter, length, pack, strip)
 import           Data.Validation (Validation (..))
 
-newtype Username = Username String deriving (Eq, Show)
-newtype Password = Password String deriving (Eq, Show)
-newtype Error = Error [String] deriving (Eq, Show, Semigroup)
+newtype Username = Username Text deriving (Eq, Show)
+newtype Password = Password Text deriving (Eq, Show)
+newtype Error = Error [Text] deriving (Eq, Show, Semigroup)
 
 -- instance Semigroup Error where
 --  Error xs <> Error ys = Error (xs <> ys)
@@ -38,19 +41,19 @@ makeUser :: Username -> Password -> Validation Error User
 makeUser username password =
   User <$> validateUsername username <*> validatePassword password
 
-cleanWhitespace :: String -> Validation Error String
+cleanWhitespace :: Text -> Validation Error Text
 cleanWhitespace "" = Failure (Error ["Value cannot be empty"])
-cleanWhitespace xs = Success (filter (/= ' ') xs)
+cleanWhitespace xs = Success (T.filter (/= ' ') (T.strip xs))
 
-requireAlphaNum :: String -> Validation Error String
+requireAlphaNum :: Text -> Validation Error Text
 requireAlphaNum xs
-  | all isAlphaNum xs = Success xs
+  | T.all isAlphaNum xs = Success xs
   | otherwise = Failure (Error ["Value cannot contain special characters"])
 
-checkLength :: Int -> String -> Validation Error String
+checkLength :: Int -> Text -> Validation Error Text
 checkLength maxlength input
-  | length input <= maxlength = Success input
-  | otherwise = Failure (Error ["Value too long, can not exceed " ++ show maxlength])
+  | T.length input <= maxlength = Success input
+  | otherwise = Failure (Error ["Value too long, can not exceed " <> (T.pack . show) maxlength])
 
 validatePassword :: Password -> Validation Error Password
 validatePassword (Password password) =
