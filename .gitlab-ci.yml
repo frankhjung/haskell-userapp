@@ -20,8 +20,5 @@ build:
     - stack test
     - echo 'testuser testpass' | stack exec -- userapp-exe -s
     - echo 'bad%user bad%pass' | stack exec -- userapp-exe -s
-  artifacts:
-    paths:
-      - .stack-work/install/x86_64-linux-tinfo6/lts-13.30/8.6.5/bin/userapp-exe
   except:
     - tags
