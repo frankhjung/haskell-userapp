@@ -1,0 +1,27 @@
+cache:
+  key: ${CI_COMMIT_REF_NAME}-cache
+  paths:
+    - public
+    - .stack
+    - .stack-work
+
+build:
+  image:
+    name: haskell:8.6.5
+    entrypoint: [""]
+  stage: build
+  variables:
+    RTSOPTS: "+RTS -N1"
+    STACK_ROOT: "${CI_PROJECT_DIR}/.stack"
+  script:
+    - stack setup
+    - stack clean
+    - stack build --pedantic --no-test --ghc-options='-O2'
+    - stack test
+    - echo 'testuser testpass' | stack exec -- userapp-exe -s
+    - echo 'bad%user bad%pass' | stack exec -- userapp-exe -s
+  artifacts:
+    paths:
+      - .stack-work/install/x86_64-linux-tinfo6/lts-13.30/8.6.5/bin/userapp-exe
+  except:
+    - tags
