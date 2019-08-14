@@ -32,12 +32,13 @@ test:
 	@stack test
 
 exec:
-	@echo
-	@echo With good parameters ...
-	@echo $(GOOD_ARGS) | stack exec -- $(TARGET) -s
-	@echo
-	@echo With bad parameters ...
-	@echo $(BAD_ARGS) | stack exec -- $(TARGET) -s
+	-echo With good parameters ...
+	-echo
+	-echo $(GOOD_ARGS) | stack exec -- $(TARGET) -s
+	-echo
+	-echo With bad parameters ...
+	-echo
+	-echo $(BAD_ARGS) | stack exec -- $(TARGET) -s
 
 doc:
 	@stack test --coverage

@@ -1,0 +1,40 @@
+stages:
+  - build
+  - deploy
+
+build:
+  except:
+    - tags
+  image:
+    name: frankhjung/haskell:8.6.5
+    entrypoint: [""]
+  stage: build
+  variables:
+    RTSOPTS: "+RTS -N1"
+    STACK_ROOT: "${CI_PROJECT_DIR}/.stack"
+  script:
+    - make setup clean all
+    - mkdir -p public
+    - cp -pr $(find .stack-work/install -type d -name hpc) public/
+    - cp -pr $(find .stack-work/dist -type d -name html) public/
+  artifacts:
+    paths:
+    - public
+  cache:
+    key: ${CI_COMMIT_REF_NAME}-${CI_JOB_NAME}
+    paths:
+      - .stack
+      - .stack-work
+
+pages:
+  # only:
+  #   refs:
+  #     - master
+  image: alpine:latest
+  stage: deploy
+  script:
+    - echo Publishing pages ...
+  artifacts:
+    paths:
+    - public
+
