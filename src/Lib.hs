@@ -36,7 +36,7 @@ import           Data.Char          (isAlphaNum)
 import           Data.Coerce
 import           Data.List.NonEmpty (NonEmpty ((:|)))
 import qualified Data.List.NonEmpty as NE (toList)
-import           Data.Validation    (Validation (..))
+import           Data.Validation    (Validation (..), validation)
 
 -- instance Semigroup Error where
 --  Error xs <> Error ys = Error (xs <> ys)
@@ -49,6 +49,12 @@ newtype Username = Username String deriving (Eq, Show)
 newtype Password = Password String deriving (Eq, Show)
 -- | The user as name and password.
 data User = User Username Password deriving (Eq, Show)
+
+class FoldAB f where
+  foldAB :: (a -> c) -> (b -> c) -> f a b -> c
+
+instance FoldAB Validation where
+  foldAB = validation
 
 -- | Make a user given a user name and password.
 makeUser :: Username -> Password -> Validation Error User
@@ -70,10 +76,15 @@ checkLength maxlength input =
 -- | Construct and then display user.
 display :: Username -> Password -> IO ()
 display username password =
-  case makeUser username password of
-    Success (User u _) -> putStrLn ("Welcome " ++ coerce u)
-    -- Success (User (Username u) _) -> putStrLn ("Welcome " ++ u)
-    Failure (Error es) -> putStr (unlines (NE.toList (coerce es)))
+  foldAB
+    (putStr . unlines . NE.toList . coerce)
+    (\(User u _) -> putStrLn ("Welcome " ++ coerce u))
+    (makeUser username password)
+
+--   case makeUser username password of
+--     Success (User u _) -> putStrLn ("Welcome " ++ coerce u)
+--     -- Success (User (Username u) _) -> putStrLn ("Welcome " ++ u)
+--     Failure (Error es) -> putStr (unlines (NE.toList (coerce es)))
 
 -- | Non-empty constructor for errors.
 errorMessage :: String -> Error
