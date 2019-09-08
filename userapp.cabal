@@ -1,5 +1,5 @@
 name:                  userapp
-version:               0.1.0.0
+version:               0.1.0
 synopsis:              Code from leanpub.com/finding-success-in-haskell
 description:           Implementation of code from Finding Success in Haskell by Julie Moronuki and Chris Martin
 homepage:              https://github.com/frankhjung/userapp#readme
@@ -18,8 +18,8 @@ executable userapp-exe
   hs-source-dirs:      app
   main-is:             Main.hs
   ghc-options:         -Wall -O2
-  build-depends:       base == 4.12.0.0
-                     , text == 1.2.3.1
+  build-depends:       base >= 4.12
+                     , text
                      , userapp
 
 library
@@ -27,9 +27,9 @@ library
   hs-source-dirs:      src
   ghc-options:         -Wall
   exposed-modules:     Lib
-  build-depends:       base == 4.12.0.0
-                     , text == 1.2.3.1
-                     , validation == 1
+  build-depends:       base >= 4.12
+                     , text
+                     , validation
 
 test-suite userapp-test
   default-language:    Haskell2010
@@ -37,10 +37,10 @@ test-suite userapp-test
   hs-source-dirs:      test
   main-is:             Spec.hs
   ghc-options:         -Wall
-  build-depends:       base == 4.12.0.0
-                     , HUnit == 1.6.0.0
-                     , text == 1.2.3.1
-                     , validation == 1
+  build-depends:       base >= 4.12
+                     , HUnit
+                     , text
+                     , validation
                      , userapp
 
 source-repository head

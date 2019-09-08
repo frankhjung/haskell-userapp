@@ -6,12 +6,17 @@ Chris Martin.
 
 Install with Cabal:
 
-  * HUnit-1.6.0.0
+  * HUnit
 
 Install with Stack setup
 
-  * text-1.2.3.1
-  * validation-1
+  * text
+  * validation
+
+## API Documentation
+
+* [GitHub Pages](https://frankhjung.github.io/haskell-userapp/)
+* [GitLab Pages](https://frankhjung1.gitlab.io/haskell-userapp/)
 
 ## Coerce
 
@@ -53,3 +58,8 @@ Where:
 type Rule a = (a -> Validation Error a)
 ```
 
+
+## References
+
+* https://leanpub.com/finding-success-in-haskell
+* https://github.com/matt-noonan/gdp-paper/

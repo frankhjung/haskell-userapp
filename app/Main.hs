@@ -1,6 +1,6 @@
 {-|
-  Module      : Lib
-  Description : Supporting functions for user password example application
+  Module      : UserApp
+  Description : Supporting functions for username password example.
   Copyright   : © Frank Jung, 2019
   License     : BSD3
   Maintainer  : frankhjung@linux.com

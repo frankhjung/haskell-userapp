@@ -1,24 +1,37 @@
+stages:
+  - build
+  - deploy
+
 cache:
-  key: ${CI_COMMIT_REF_NAME}-cache
+  key: $CI_COMMIT_REF_NAME
   paths:
-    - public
     - .stack
     - .stack-work
 
+variables:
+  RTSOPTS: "+RTS -N1"
+  STACK_ROOT: "${CI_PROJECT_DIR}/.stack"
+
 build:
   image:
-    name: haskell:8.6.5
-    entrypoint: [""]
+    name: frankhjung/haskell:8.6.5
   stage: build
-  variables:
-    RTSOPTS: "+RTS -N1"
-    STACK_ROOT: "${CI_PROJECT_DIR}/.stack"
   script:
-    - stack setup
-    - stack clean
-    - stack build --pedantic --no-test --ghc-options='-O2'
-    - stack test
+    - make setup clean all
     - echo 'testuser testpass' | stack exec -- userapp-exe -s
     - echo 'bad%user bad%pass' | stack exec -- userapp-exe -s
   except:
     - tags
+
+pages:
+  image: alpine:latest
+  stage: deploy
+  script:
+    - mkdir -p public
+    - cp -pr .stack-work/dist/x86_64-linux/Cabal-*/doc/html/userapp/* public/
+  artifacts:
+    paths:
+    - public
+  only:
+    refs:
+      - master

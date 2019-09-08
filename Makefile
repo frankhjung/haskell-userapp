@@ -40,7 +40,7 @@ exec:
 	@echo $(BAD_ARGS) | stack exec -- $(TARGET) -s
 
 doc:
-	@stack test --coverage
+	@stack test --ghc-options -fhpc --coverage
 	@stack haddock
 
 bench:
@@ -51,7 +51,7 @@ install:
 
 setup:
 	-stack setup
-	-stack build --dependencies-only --test --no-run-tests
+	-stack build --pedantic --no-test --ghc-options='-O2'
 	-stack query
 	-stack ls dependencies
 

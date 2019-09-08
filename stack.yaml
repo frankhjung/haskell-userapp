@@ -1,8 +1,8 @@
-resolver: lts-13.30
+resolver: lts-13.19
 flags: {}
 allow-newer: false
 packages:
   - .
-extra-deps:
+extra-deps: []
 arch: x86_64
 system-ghc: true
