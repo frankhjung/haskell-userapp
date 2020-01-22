@@ -1,5 +1,5 @@
 name:                  userapp
-version:               0.1.0
+version:               0.2.0
 synopsis:              Code from leanpub.com/finding-success-in-haskell
 description:           Implementation of code from Finding Success in Haskell by Julie Moronuki and Chris Martin
 homepage:              https://github.com/frankhjung/userapp#readme
