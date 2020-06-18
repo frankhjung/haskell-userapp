@@ -25,4 +25,3 @@ main = runTestTT $
     , TestCase (Failure (errorMessage "Invalid password:" <> errorMessage "Value cannot contain special characters" <> errorMessage "Value too long, can not exceed 15") @=? makeUser (Username "frank") (Password "@bcdefghji123456"))
     , TestCase (Success (User (Username "frank") (Password "abcdef123")) @=? makeUser (Username "frank") (Password "abcdef123"))
     ]
-

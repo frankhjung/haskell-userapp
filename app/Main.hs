@@ -16,5 +16,6 @@ import           Lib
 --
 -- > echo username password | stack exec -- userapp-exe
 main :: IO ()
-main = words <$> getLine >>=
-  \[username, password] -> display (Username username) (Password password)
+main =
+  getLine >>=
+    ( \[username, password] -> display (Username username) (Password password) ) . words

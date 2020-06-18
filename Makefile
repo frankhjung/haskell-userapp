@@ -1,6 +1,6 @@
 #!/usr/bin/env make
 
-.PHONY:	all bench build check clean cleanall doc exec ghci install lint setup style tags test
+.PHONY:	all bench build check clean cleanall doc exec ghci help install lint setup style tags test
 
 TARGET	:= userapp-exe
 SUBS	:= $(wildcard */)
@@ -25,6 +25,9 @@ style:
 lint:
 	@hlint --color $(SRCS)
 
+help:
+	@echo "make [all|bench|build|check|clean|cleanall|doc|exec|ghci|install|lint|setup|style|tags|test]"
+
 build:
 	@stack build --pedantic --no-test --ghc-options='-O2'
 
@@ -32,13 +35,12 @@ test:
 	@stack test
 
 exec:
-	-echo With good parameters ...
-	-echo
-	-echo $(GOOD_ARGS) | stack exec -- $(TARGET) -s
-	-echo
-	-echo With bad parameters ...
-	-echo
-	-echo $(BAD_ARGS) | stack exec -- $(TARGET) -s
+	@echo
+	@echo With good parameters ...
+	echo $(GOOD_ARGS) | stack exec -- $(TARGET) -s
+	@echo
+	@echo With bad parameters ...
+	echo $(BAD_ARGS) | stack exec -- $(TARGET) -s
 
 doc:
 	@stack test --coverage

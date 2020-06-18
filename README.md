@@ -4,7 +4,6 @@ An implementation of code from [Finding Success (and Failure) in
 Haskell](https://leanpub.com/finding-success-in-haskell) by Julie Moronuki and
 Chris Martin.
 
-
 ## Pre-requisites
 
 Install with Cabal:
@@ -16,14 +15,12 @@ Install with Stack:
   * text-1.2.3.1
   * validation-1
 
-
 ## API Documentation
 
 * [GitHub Pages](https://frankhjung.github.io/haskell-userapp/)
 * [GitLab Pages](https://frankhjung1.gitlab.io/haskell-userapp/)
   * [API](https://frankhjung1.gitlab.io/haskell-userapp/html/userapp/index.html)
   * [Test Coverage](https://frankhjung1.gitlab.io/haskell-userapp/hpc/index.html)
-
 
 ## Coerce
 
@@ -42,19 +39,19 @@ Success (User u _) -> Data.Text.IO.putStrLn (Data.Text.concat ["Welcome ", coerc
 
 ### a function
 
-To coerce a function, for example from
+To coerce a function, for example from:
 
 ```haskell
 cleanWhitespace :: Rule Text
 ```
 
-to
+To:
 
 ```haskell
 cleanWhitespace :: Rule Password
 ```
 
-then:
+Then:
 
 ```haskell
 (coerce cleanWhitespace :: Rule Password) password
@@ -65,8 +62,8 @@ Where:
 type Rule a = (a -> Validation Error a)
 ```
 
-
 ## References
 
 * https://leanpub.com/finding-success-in-haskell
 * https://github.com/matt-noonan/gdp-paper/
+

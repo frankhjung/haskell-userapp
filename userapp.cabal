@@ -1,5 +1,5 @@
 name:                  userapp
-version:               0.1.0.0
+version:               0.1.0
 synopsis:              Code from leanpub.com/finding-success-in-haskell
 description:           Implementation of code from Finding Success in Haskell by Julie Moronuki and Chris Martin
 homepage:              https://github.com/frankhjung/userapp#readme
@@ -7,7 +7,7 @@ license:               BSD3
 license-file:          LICENSE
 author:                Frank H Jung
 maintainer:            frankhjung@linux.com
-copyright:             Copyright © 2019 Frank H Jung
+copyright:             Copyright © 2019-2020 Frank H Jung
 category:              education
 build-type:            Simple
 extra-source-files:    README.md
@@ -29,7 +29,7 @@ library
   exposed-modules:     Lib
   build-depends:       base == 4.12.0.0
                      , text == 1.2.3.1
-                     , validation == 1
+                     , validation == 1.1
 
 test-suite userapp-test
   default-language:    Haskell2010
@@ -40,7 +40,7 @@ test-suite userapp-test
   build-depends:       base == 4.12.0.0
                      , HUnit == 1.6.0.0
                      , text == 1.2.3.1
-                     , validation == 1
+                     , validation == 1.1
                      , userapp
 
 source-repository head
