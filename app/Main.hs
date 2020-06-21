@@ -1,7 +1,7 @@
 {-|
   Module      : UserApp
-  Description : Supporting functions for username password example.
-  Copyright   : © Frank Jung, 2019
+  Description : Username and password example application.
+  Copyright   : © Frank Jung, 2019-2020
   License     : BSD3
   Maintainer  : frankhjung@linux.com
   Stability   : stable
@@ -12,11 +12,13 @@ module Main where
 
 import qualified Data.Text    as T (words)
 import qualified Data.Text.IO as TIO (getLine)
+
 import           Lib
 
 -- To run with args:
 --
 -- > echo username password | stack exec -- userapp-exe
 main :: IO ()
-main = T.words <$> TIO.getLine >>=
-  \[username, password] -> display (Username username) (Password password)
+main =
+  TIO.getLine >>=
+    ( \[username, password] -> display (Username username) (Password password) ) . T.words
