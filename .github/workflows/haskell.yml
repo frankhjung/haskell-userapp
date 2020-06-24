@@ -21,7 +21,7 @@ jobs:
 
     - name: stack
       run: |
-        curl -sSL https://get.haskellstack.org/ | sh
+        stack upgrade
         stack setup
 
     - name: build
