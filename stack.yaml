@@ -1,8 +1,9 @@
-resolver: lts-14.27
-flags: {}
-allow-newer: false
-packages:
-  - .
-extra-deps:
+---
+
 arch: x86_64
 system-ghc: true
+resolver: lts-14.27
+allow-newer: false
+flags: {}
+packages: ['.']
+extra-deps: []
