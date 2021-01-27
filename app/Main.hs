@@ -1,5 +1,5 @@
 {-|
-  Module      : Lib
+  Module      : Main
   Description : Supporting functions for user password example application
   Copyright   : © Frank Jung, 2019
   License     : BSD3

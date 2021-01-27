@@ -33,7 +33,7 @@ module Lib
         ) where
 
 import           Data.Char          (isAlphaNum)
-import           Data.Coerce
+import           Data.Coerce        (coerce)
 import           Data.List.NonEmpty (NonEmpty ((:|)))
 import qualified Data.List.NonEmpty as NE (toList)
 import           Data.Validation    (Validation (..), validation)

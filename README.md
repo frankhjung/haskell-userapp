@@ -1,5 +1,11 @@
 # Exercises from Finding Success in Haskell
 
+# TODO
+
+* add cache to github pipeline
+* build on all branches
+* publish pages on master only
+
 An implementation of code from [Finding Success (and Failure) in
 Haskell](https://leanpub.com/finding-success-in-haskell) by Julie Moronuki and
 Chris Martin.
@@ -66,4 +72,3 @@ type Rule a = (a -> Validation Error a)
 
 * https://leanpub.com/finding-success-in-haskell
 * https://github.com/matt-noonan/gdp-paper/
-

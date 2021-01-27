@@ -1,13 +1,17 @@
+---
+
 name: haskell userapp
 
 on:
   push:
-    branches:
-      - master
+  check_run:
+    types: [rerequested, requested_action]
 
 jobs:
 
   build:
+
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
 
     runs-on: ubuntu-latest
 
