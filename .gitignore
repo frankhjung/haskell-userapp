@@ -20,6 +20,7 @@ dist-*
 *.prof
 public
 .stack-work/
+stack.yaml.lock
 *.swp
 tags
 *.tix
