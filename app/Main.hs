@@ -14,7 +14,7 @@ import           Lib
 
 -- To run with args:
 --
--- > echo username password | stack exec -- userapp-exe
+-- > echo username password | stack exec -- userapp
 main :: IO ()
 main =
   getLine >>=

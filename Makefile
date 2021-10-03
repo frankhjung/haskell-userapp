@@ -29,7 +29,7 @@ lint:	$(SRCS)
 
 build:
 	@echo build ...
-	@stack build --pedantic --no-test
+	@stack build --no-test
 
 test:
 	@echo test ...
