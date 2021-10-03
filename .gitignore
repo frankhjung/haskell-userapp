@@ -15,6 +15,7 @@ dist-*
 .hpc
 .hsenv
 .HTF/
+*.lock
 *.log
 *.o
 *.prof

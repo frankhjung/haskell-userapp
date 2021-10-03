@@ -1,8 +1,11 @@
+---
+
 resolver: lts-14.27
 flags: {}
 allow-newer: false
-packages:
-  - .
-extra-deps:
 arch: x86_64
 system-ghc: true
+packages: ['.']
+extra-deps:
+  - text-1.2.3.1
+  - validation-1.1

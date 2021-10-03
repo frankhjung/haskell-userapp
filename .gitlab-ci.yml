@@ -1,37 +1,37 @@
+---
+
 stages:
   - build
   - deploy
 
-cache:
-  key: $CI_COMMIT_REF_NAME
-  paths:
-    - .stack
-    - .stack-work
-
-variables:
-  RTSOPTS: "+RTS -N1"
-  STACK_ROOT: "${CI_PROJECT_DIR}/.stack"
-
 build:
-  image:
-    name: frankhjung/haskell:8.6.5
   stage: build
-  script:
-    - make setup clean all
-    - echo 'testuser testpass' | stack exec -- userapp-exe -s
-    - echo 'bad%user bad%pass' | stack exec -- userapp-exe -s
   except:
     - tags
-
-pages:
-  image: alpine:latest
-  stage: deploy
+  image: frankhjung/haskell:8.6.5
+  cache:
+    key: ${CI_COMMIT_REF_NAME}
+    paths:
+      - .stack
+      - .stack-work
+  variables:
+    RTSOPTS: "+RTS -N1"
+    STACK_ROOT: "${CI_PROJECT_DIR}/.stack"
   script:
-    - mkdir -p public
-    - cp -pr .stack-work/dist/x86_64-linux/Cabal-*/doc/html/userapp/* public/
+    - make setup clean check build test doc
+    - mv $(stack path --local-doc-root) public/
   artifacts:
     paths:
-    - public
+      - public
+
+pages:
+  stage: deploy
   only:
     refs:
       - master
+  image: alpine:latest
+  script:
+    - echo Publishing pages ...
+  artifacts:
+    paths:
+      - public

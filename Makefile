@@ -2,9 +2,8 @@
 
 .PHONY:	all bench build check clean cleanall doc exec ghci install lint setup style tags test
 
-TARGET	:= userapp-exe
-SUBS	:= $(wildcard */)
-SRCS	:= $(wildcard $(addsuffix *.hs, $(SUBS)))
+TARGET	:= userapp
+SRCS	:= $(wildcard *.hs */*.hs)
 
 GOOD_ARGS	?= 'testuser testpassword'
 BAD_ARGS	?= 'test%user test@password'
@@ -16,32 +15,36 @@ all:	check build test doc exec
 
 check:	tags style lint
 
-tags:
+tags:	$(SRCS)
+	@echo tags ...
 	@hasktags --ctags --extendedctag $(SRCS)
 
-style:
+style:	$(SRCS)
+	@echo style ...
 	@stylish-haskell --config=.stylish-haskell.yaml --inplace $(SRCS)
 
-lint:
+lint:	$(SRCS)
+	@echo lint ...
 	@hlint --color $(SRCS)
 
 build:
-	@stack build --pedantic --no-test --ghc-options='-O2'
+	@echo build ...
+	@stack build --no-test
 
 test:
+	@echo test ...
 	@stack test
 
 exec:
 	@echo
 	@echo With good parameters ...
-	@echo $(GOOD_ARGS) | stack exec -- $(TARGET) -s
+	echo $(GOOD_ARGS) | stack exec -- $(TARGET) -s
 	@echo
 	@echo With bad parameters ...
-	@echo $(BAD_ARGS) | stack exec -- $(TARGET) -s
+	echo $(BAD_ARGS) | stack exec -- $(TARGET) -s
 
 doc:
-	@stack test --ghc-options -fhpc --coverage
-	@stack haddock
+	@stack haddock --no-rerun-tests --no-reconfigure --haddock-deps
 
 bench:
 	@stack bench --benchmark-arguments '-o .stack-work/benchmark.html'
@@ -50,17 +53,22 @@ install:
 	@stack install --local-bin-path $(HOME)/bin
 
 setup:
-	-stack setup
-	-stack build --pedantic --no-test --ghc-options='-O2'
-	-stack query
-	-stack ls dependencies
+	@stack update
+	@stack setup
+	@stack build
+	@stack query
+	@stack ls dependencies
+	#stack exec ghc-pkg -- list
 
 ghci:
 	@stack ghci --ghci-options -Wno-type-defaults
 
 clean:
 	@stack clean
-	@$(RM) -rf $(TARGET).tix stack.yaml.lock
+	@$(RM) -rf *.tix
 
 cleanall: clean
-	@$(RM) -rf .stack-work/ $(TARGET)
+	@stack clean --full
+	#$(RM) -rf .stack-work/
+	#$(RM) -rf $(patsubst %.hs, %.hi, $(SRCS))
+	#$(RM) -rf $(patsubst %.hs, %.o, $(SRCS))
