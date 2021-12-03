@@ -1,6 +1,6 @@
 #!/usr/bin/env make
 
-.PHONY:	all bench build check clean cleanall default doc exec ghci install lint setup style tags test
+.PHONY:	all build check clean cleanall default exec ghci lint setup style tags test
 
 TARGET	:= userapp
 SRC	:= $(wildcard *.hs */*.hs)
@@ -10,7 +10,7 @@ BAD_ARGS	?= 'test%user test@password'
 
 default:	check build test exec
 
-all:	check build test doc exec
+all:	check build test exec
 
 check:	tags style lint
 
@@ -43,15 +43,6 @@ exec:
 	@echo With bad parameters ...
 	echo $(BAD_ARGS) | stack exec -- $(TARGET) -s
 
-doc:
-	@stack haddock $(TARGET)
-
-bench:
-	@stack bench $(TARGET) --benchmark-arguments '-o .stack-work/benchmark.html'
-
-install:
-	@stack install --local-bin-path $(HOME)/bin
-
 setup:
 	@stack path
 	@stack query
@@ -69,4 +60,3 @@ clean:
 
 cleanall: clean
 	@stack purge
-	-$(RM) -rf public/ .stack-work/

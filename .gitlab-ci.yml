@@ -13,26 +13,9 @@ build:
     RTSOPTS: "+RTS -N1"
     STACK_ROOT: "${CI_PROJECT_DIR}/.stack"
   script:
-    - make clean setup check build test doc exec
-    - mv $(stack path --local-doc-root)/userapp*/ public/
-  artifacts:
-    paths:
-      - public
+    - make clean check build test exec
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - .stack/
       - .stack-work/
-
-pages:
-  stage: deploy
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
-  image: alpine:latest
-  script:
-    - echo Publishing documentation ...
-  dependencies:
-    - build
-  artifacts:
-    paths:
-      - public

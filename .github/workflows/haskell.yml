@@ -1,49 +1,42 @@
+---
+
 name: haskell userapp
 
+# yamllint disable-line rule:truthy
 on:
   push:
-    branches:
-      - master
+    branches: ['master', 'feature*']
+    tags-ignore: ['*']
+  check_run:
+    types: [rerequested, requested_action]
+# yamllint enable
+
+env:
+  STACK_ROOT: ${{ github.workspace }}/.stack
 
 jobs:
 
   build:
 
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+
     runs-on: ubuntu-latest
 
     steps:
 
-    - name: checkout
-      uses: actions/checkout@v1.0.0
-      with:
-        ref: refs/heads/master
-        fetch-depth: 1
+      - name: checkout
+        uses: actions/checkout@v3
 
-    - name: stack
-      run: |
-        stack upgrade
-        stack setup
+      - name: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            .stack-work/
+            ${{ env.STACK_ROOT }}
+          key: ${{ github.ref }}
 
-    - name: build
-      run: stack build --pedantic --no-test --ghc-options='-O2'
+      - name: build
+        run: stack build --pedantic --no-test
 
-    - name: test
-      run: stack test
-
-    - name: documentation
-      run: |
-        stack test --ghc-options -fhpc --coverage
-        stack haddock
-
-    - name: copy
-      run: |
-        mkdir -p public
-        cp -pr .stack-work/dist/x86_64-linux/Cabal-*/doc/html/userapp/* public/
-
-    - name: publish
-      uses: crazy-max/ghaction-github-pages@v0.4.0
-      if: success()
-      with:
-        build_dir: public
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}
+      - name: test
+        run: stack test --coverage

@@ -2,6 +2,16 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE OverloadedStrings          #-}
 
+{-|
+  Module      : UserLib
+  Description : Username and password utility functions.
+  Copyright   : © Frank Jung, 2019-2020
+  License     : BSD3
+  Maintainer  : frankhjung@linux.com
+  Stability   : stable
+  Portability : portable
+-}
+
 module UserLib
         (
           -- * Data Types
