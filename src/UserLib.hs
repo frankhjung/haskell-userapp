@@ -1,7 +1,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE OverloadedStrings          #-}
 
-module Lib
+module UserLib
         (
           -- * Data Types
           Error (..)
@@ -42,10 +42,10 @@ makeUser username password =
   User <$> parseUsername username <*> parsePassword password
 
 checkLength :: Int -> Rule Text
-checkLength maxlength as =
-  if T.length as > maxlength
+checkLength maxlength xs =
+  if T.length xs > maxlength
     then Failure (Error ["Value too long, can not exceed " <> (T.pack . show) maxlength])
-    else Success as
+    else Success xs
 
 checkPasswordLength :: Rule Password
 checkPasswordLength = coerce (checkLength 15) :: Rule Password
@@ -55,7 +55,7 @@ checkUsernameLength = coerce (checkLength 10) :: Rule Username
 
 cleanWhitespace :: Rule Text
 cleanWhitespace "" = Failure (Error ["Value cannot be empty"])
-cleanWhitespace as = Success (T.filter (/= ' ') (T.strip as))
+cleanWhitespace xs = Success (T.filter (/= ' ') (T.strip xs))
 
 display :: Username -> Password -> IO ()
 display username password =
@@ -76,9 +76,9 @@ parseUsername username =
     Success u -> Success u
 
 requireAlphaNum :: Rule Text
-requireAlphaNum as =
-  if T.all isAlphaNum as
-    then Success as
+requireAlphaNum xs =
+  if T.all isAlphaNum xs
+    then Success xs
     else Failure (Error ["Value cannot contain special characters"])
 
 validatePassword :: Rule Password
@@ -92,4 +92,3 @@ validateUsername username =
   case (coerce cleanWhitespace :: Rule Username) username of
     Failure e -> Failure e
     Success u -> (coerce requireAlphaNum :: Rule Username) u *> checkUsernameLength u *> Success u
-

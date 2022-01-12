@@ -3,8 +3,12 @@
 module Main (main) where
 
 import           Data.Validation (Validation (..))
-import           Lib
-import           Test.HUnit
+import           Test.HUnit      (Counts, Test (TestCase, TestList), runTestTT,
+                                  (@=?))
+import           UserLib         (Error (Error), Password (Password),
+                                  User (User), Username (Username), checkLength,
+                                  cleanWhitespace, makeUser, parsePassword,
+                                  parseUsername, requireAlphaNum)
 
 main :: IO Counts
 main = runTestTT $
@@ -25,4 +29,3 @@ main = runTestTT $
           , TestCase (Failure (Error ["Invalid password:", "Value cannot contain special characters", "Value too long, can not exceed 15"]) @=? makeUser (Username "frank") (Password "@bcdefghji123456"))
           , TestCase (Success (User (Username "frank") (Password "abcdef123")) @=? makeUser (Username "frank") (Password "abcdef123"))
           ]
-

@@ -13,7 +13,8 @@ module Main where
 import qualified Data.Text    as T (words)
 import qualified Data.Text.IO as TIO (getLine)
 
-import           Lib
+import           UserLib      (Password (Password), Username (Username),
+                               display)
 
 -- To run with args:
 --
