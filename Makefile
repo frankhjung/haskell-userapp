@@ -53,10 +53,12 @@ ghci:
 
 clean:
 	@stack clean
-	-$(RM) $(addsuffix .hi, $(basename $(SRC)))
-	-$(RM) $(addsuffix .o, $(basename $(SRC)))
-	-$(RM) $(addsuffix .prof, $(basename $(SRC)))
-	-$(RM) $(addsuffix .tix, $(basename $(SRC)))
+	@cabal clean
+	@$(RM) tags
+	@$(RM) $(wildcard *.hi **/*.hi)
+	@$(RM) $(wildcard *.o **/*.o)
+	@$(RM) $(wildcard *.prof **/*.prof)
+	@$(RM) $(wildcard *.tix **/*.tix)
 
 cleanall: clean
 	@stack purge
