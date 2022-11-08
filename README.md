@@ -4,19 +4,40 @@ An implementation of code from [Finding Success (and Failure) in
 Haskell](https://leanpub.com/finding-success-in-haskell) by Julie Moronuki and
 Chris Martin.
 
-Install with Cabal:
+## Quick Start
 
-  * HUnit
+To install dependencies
 
-Install with Stack setup
+  - HUnit (use Cabal to install)
+  - text
+  - validation
 
-  * text
-  * validation
+Run:
+
+```bash
+make setup build
+```
+
+## GHCi
+
+To load source and test files to
+[GHCi](https://docs.haskellstack.org/en/latest/ghci/#ghci) include the
+[HUnit](https://wiki.haskell.org/HUnit_1.0_User%27s_Guide) package:
+
+```bash
+stack ghci userapp
+```
+
+Then load other libraries as modules:
+
+```haskell
+λ> :m + Data.Text Data.Validation Data.Coerce Data.Char
+```
 
 ## API Documentation
 
-* [GitHub Pages](https://frankhjung.github.io/haskell-userapp/)
-* [GitLab Pages](https://frankhjung1.gitlab.io/haskell-userapp/)
+- [GitHub Pages](https://frankhjung.github.io/haskell-userapp/)
+- [GitLab Pages](https://frankhjung1.gitlab.io/haskell-userapp/)
 
 ## Coerce
 
@@ -35,31 +56,33 @@ Success (User u _) -> Data.Text.IO.putStrLn (Data.Text.concat ["Welcome ", coerc
 
 ### a function
 
-To coerce a function, for example from
+To coerce a function, for example:
+
+From:
 
 ```haskell
 cleanWhitespace :: Rule Text
 ```
 
-to
+To
 
 ```haskell
 cleanWhitespace :: Rule Password
 ```
 
-then:
+Then:
 
 ```haskell
 (coerce cleanWhitespace :: Rule Password) password
 ```
 
 Where:
+
 ```haskell
 type Rule a = (a -> Validation Error a)
 ```
 
-
 ## References
 
-* https://leanpub.com/finding-success-in-haskell
-* https://github.com/matt-noonan/gdp-paper/
+- https://leanpub.com/finding-success-in-haskell
+- https://github.com/matt-noonan/gdp-paper/

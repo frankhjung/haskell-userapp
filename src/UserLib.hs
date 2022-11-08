@@ -1,3 +1,4 @@
+{-# LANGUAGE DerivingStrategies         #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE OverloadedStrings          #-}
 
@@ -8,6 +9,7 @@ module UserLib
         , Password (..)
         , User (..)
         , Username (..)
+        , Rule
           -- * Constructors
         , makeUser
           -- * Functions
@@ -31,9 +33,11 @@ import qualified Data.Text       as T (all, concat, filter, length, pack, strip,
 import qualified Data.Text.IO    as TIO (putStr, putStrLn)
 import           Data.Validation (Validation (..))
 
-newtype Error = Error [Text] deriving (Eq, Show, Semigroup)
-newtype Username = Username Text deriving (Eq, Show)
-newtype Password = Password Text deriving (Eq, Show)
+newtype Error = Error [Text]
+  deriving stock (Eq, Show)
+  deriving newtype (Semigroup)
+newtype Username = Username Text deriving stock (Eq, Show)
+newtype Password = Password Text deriving stock (Eq, Show)
 data User = User Username Password deriving (Eq, Show)
 type Rule a = (a -> Validation Error a)
 

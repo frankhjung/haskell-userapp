@@ -8,30 +8,31 @@ build:
   stage: build
   except:
     - tags
-  image: frankhjung/haskell:8.6.5
-  cache:
-    key: ${CI_COMMIT_REF_NAME}
-    paths:
-      - .stack
-      - .stack-work
+  image: frankhjung/haskell:9.0.2
   variables:
     RTSOPTS: "+RTS -N1"
     STACK_ROOT: "${CI_PROJECT_DIR}/.stack"
   script:
-    - make setup clean check build test doc
-    - mv $(stack path --local-doc-root) public/
+    - make clean setup check build test doc exec
+    - mv $(stack path --local-doc-root)/userapp*/ public/
   artifacts:
     paths:
       - public
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - .stack/
+      - .stack-work/
 
 pages:
   stage: deploy
-  only:
-    refs:
-      - master
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
   image: alpine:latest
   script:
-    - echo Publishing pages ...
+    - echo Publishing documentation ...
+  dependencies:
+    - build
   artifacts:
     paths:
       - public

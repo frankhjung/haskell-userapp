@@ -1,39 +1,39 @@
 #!/usr/bin/env make
 
-.PHONY:	all bench build check clean cleanall doc exec ghci install lint setup style tags test
+.PHONY:	all bench build check clean cleanall default doc exec ghci install lint setup style tags test
 
 TARGET	:= userapp
-SRCS	:= $(wildcard *.hs */*.hs)
+SRC	:= $(wildcard *.hs */*.hs)
 
 GOOD_ARGS	?= 'testuser testpassword'
 BAD_ARGS	?= 'test%user test@password'
 
-.PHONY: default
 default:	check build test exec
 
 all:	check build test doc exec
 
 check:	tags style lint
 
-tags:	$(SRCS)
+tags:	$(SRC)
 	@echo tags ...
-	@hasktags --ctags --extendedctag $(SRCS)
+	@hasktags --ctags --extendedctag $(SRC)
 
-style:	$(SRCS)
+style:	$(SRC)
 	@echo style ...
-	@stylish-haskell --config=.stylish-haskell.yaml --inplace $(SRCS)
+	@stylish-haskell --config=.stylish-haskell.yaml --inplace $(SRC)
 
-lint:	$(SRCS)
+lint:	$(SRC)
 	@echo lint ...
-	@hlint --color $(SRCS)
+	@cabal check --verbose
+	@hlint --cross --color --show $(SRC)
 
 build:
 	@echo build ...
-	@stack build --no-test
+	@stack build --pedantic
 
 test:
 	@echo test ...
-	@stack test
+	@stack test $(TARGET)
 
 exec:
 	@echo
@@ -44,31 +44,29 @@ exec:
 	echo $(BAD_ARGS) | stack exec -- $(TARGET) -s
 
 doc:
-	@stack haddock --no-rerun-tests --no-reconfigure --haddock-deps
+	@stack haddock $(TARGET)
 
 bench:
-	@stack bench --benchmark-arguments '-o .stack-work/benchmark.html'
+	@stack bench $(TARGET) --benchmark-arguments '-o .stack-work/benchmark.html'
 
 install:
 	@stack install --local-bin-path $(HOME)/bin
 
 setup:
-	@stack update
-	@stack setup
-	@stack build
+	@stack path
 	@stack query
 	@stack ls dependencies
-	#stack exec ghc-pkg -- list
 
 ghci:
 	@stack ghci --ghci-options -Wno-type-defaults
 
 clean:
 	@stack clean
-	@$(RM) -rf *.tix
+	-$(RM) $(addsuffix .hi, $(basename $(SRC)))
+	-$(RM) $(addsuffix .o, $(basename $(SRC)))
+	-$(RM) $(addsuffix .prof, $(basename $(SRC)))
+	-$(RM) $(addsuffix .tix, $(basename $(SRC)))
 
 cleanall: clean
-	@stack clean --full
-	#$(RM) -rf .stack-work/
-	#$(RM) -rf $(patsubst %.hs, %.hi, $(SRCS))
-	#$(RM) -rf $(patsubst %.hs, %.o, $(SRCS))
+	@stack purge
+	-$(RM) -rf public/ .stack-work/
