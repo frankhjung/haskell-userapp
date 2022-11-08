@@ -9,6 +9,7 @@
 @package userapp
 @version 0.5.0
 
+
 module UserLib
 newtype Error
 Error :: [Text] -> Error
