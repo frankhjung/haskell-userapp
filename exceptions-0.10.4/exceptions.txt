@@ -453,11 +453,11 @@ displayException :: Exception e => e -> String
 --   hierarchy. When an exception of type <tt>e</tt> is thrown, behind the
 --   scenes it is encapsulated in a <tt>SomeException</tt>.
 data SomeException
-[SomeException] :: forall e. Exception e => e -> SomeException
+SomeException :: e -> SomeException
 instance GHC.Show.Show a => GHC.Show.Show (Control.Monad.Catch.ExitCase a)
 instance GHC.Base.Monad m => GHC.Base.Functor (Control.Monad.Catch.Handler m)
 instance Control.Monad.Catch.MonadMask GHC.Types.IO
-instance (e Data.Type.Equality.~ GHC.Exception.Type.SomeException) => Control.Monad.Catch.MonadMask (Data.Either.Either e)
+instance (e GHC.Types.~ GHC.Exception.Type.SomeException) => Control.Monad.Catch.MonadMask (Data.Either.Either e)
 instance Control.Monad.Catch.MonadMask m => Control.Monad.Catch.MonadMask (Control.Monad.Trans.Identity.IdentityT m)
 instance Control.Monad.Catch.MonadMask m => Control.Monad.Catch.MonadMask (Control.Monad.Trans.State.Lazy.StateT s m)
 instance Control.Monad.Catch.MonadMask m => Control.Monad.Catch.MonadMask (Control.Monad.Trans.State.Strict.StateT s m)
@@ -471,7 +471,7 @@ instance (Control.Monad.Trans.Error.Error e, Control.Monad.Catch.MonadMask m) =>
 instance Control.Monad.Catch.MonadMask m => Control.Monad.Catch.MonadMask (Control.Monad.Trans.Except.ExceptT e m)
 instance Control.Monad.Catch.MonadCatch GHC.Types.IO
 instance Control.Monad.Catch.MonadCatch GHC.Conc.Sync.STM
-instance (e Data.Type.Equality.~ GHC.Exception.Type.SomeException) => Control.Monad.Catch.MonadCatch (Data.Either.Either e)
+instance (e GHC.Types.~ GHC.Exception.Type.SomeException) => Control.Monad.Catch.MonadCatch (Data.Either.Either e)
 instance Control.Monad.Catch.MonadCatch m => Control.Monad.Catch.MonadCatch (Control.Monad.Trans.Identity.IdentityT m)
 instance Control.Monad.Catch.MonadCatch m => Control.Monad.Catch.MonadCatch (Control.Monad.Trans.State.Lazy.StateT s m)
 instance Control.Monad.Catch.MonadCatch m => Control.Monad.Catch.MonadCatch (Control.Monad.Trans.State.Strict.StateT s m)
@@ -490,7 +490,7 @@ instance Control.Monad.Catch.MonadThrow Language.Haskell.TH.Syntax.Q
 instance Control.Monad.Catch.MonadThrow GHC.Types.IO
 instance Control.Monad.Catch.MonadThrow (GHC.ST.ST s)
 instance Control.Monad.Catch.MonadThrow GHC.Conc.Sync.STM
-instance (e Data.Type.Equality.~ GHC.Exception.Type.SomeException) => Control.Monad.Catch.MonadThrow (Data.Either.Either e)
+instance (e GHC.Types.~ GHC.Exception.Type.SomeException) => Control.Monad.Catch.MonadThrow (Data.Either.Either e)
 instance Control.Monad.Catch.MonadThrow m => Control.Monad.Catch.MonadThrow (Control.Monad.Trans.Identity.IdentityT m)
 instance Control.Monad.Catch.MonadThrow m => Control.Monad.Catch.MonadThrow (Control.Monad.Trans.State.Lazy.StateT s m)
 instance Control.Monad.Catch.MonadThrow m => Control.Monad.Catch.MonadThrow (Control.Monad.Trans.State.Strict.StateT s m)
