@@ -8,14 +8,15 @@ build:
   stage: build
   except:
     - tags
-  image: frankhjung/haskell:9.0.2
+  image:
+    name: frankhjung/haskell:9.4.7
+    entrypoint: [""]
   variables:
-    RTSOPTS: "+RTS -N1"
-    STACK_ROOT: "${CI_PROJECT_DIR}/.stack"
+    RTSOPTS: +RTS -N1 -s
+    STACK_ROOT: ${CI_PROJECT_DIR}/.stack-work
   script:
     - make clean check build test exec
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
+    key: ${CI_COMMIT_REF_NAME}
     paths:
-      - .stack/
       - .stack-work/

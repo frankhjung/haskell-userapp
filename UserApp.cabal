@@ -1,0 +1,56 @@
+cabal-version:      3.0
+name:               UserApp
+version:            0.6.0
+synopsis:           Code from leanpub.com/finding-success-in-haskell
+description:
+  Implementation of code from Finding Success in Haskell by Julie Moronuki and
+  Chris Martin
+
+homepage:           https://github.com/frankhjung/userapp#readme
+author:             Frank H Jung
+maintainer:         frankhjung@linux.com
+copyright:          Copyright © 2019-2023 Frank H Jung
+license:            BSD-2-Clause
+license-file:       LICENSE
+category:           education
+build-type:         Simple
+extra-source-files: README.md
+
+source-repository head
+  type:     git
+  location: https://github.com/frankhjung/userapp
+
+executable main
+  hs-source-dirs:   app src
+  default-language: Haskell2010
+  main-is:          Main.hs
+  autogen-modules:  Paths_UserApp
+  other-modules:
+    Paths_UserApp
+    UserLib
+
+  build-depends:
+    , base
+    , text
+    , validation
+
+library
+  hs-source-dirs:   src
+  default-language: Haskell2010
+  exposed-modules:  UserLib
+  build-depends:
+    , base        >=4 && <5
+    , text
+    , validation
+
+test-suite userapp-test
+  hs-source-dirs:   test src
+  main-is:          UserSpec.hs
+  default-language: Haskell2010
+  type:             exitcode-stdio-1.0
+  other-modules:    UserLib
+  build-depends:
+    , base
+    , HUnit
+    , text
+    , validation

@@ -1,12 +1,11 @@
 ---
-
-resolver: lts-19.27
-flags: {}
+resolver: lts-21.14
 arch: x86_64
-system-ghc: true
-packages: ['.']
+packages: ["."]
 allow-newer: true
+ghc-options:
+  "$everything": -O2
+  "$locals": -Wall
+  "$targets": -Werror
 extra-deps:
-  - HUnit-1.6.2.0
-  - text-1.2.5.0
   - validation-1.1.2

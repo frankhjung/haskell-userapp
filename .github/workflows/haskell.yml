@@ -12,7 +12,7 @@ on:
 # yamllint enable
 
 env:
-  STACK_ROOT: ${{ github.workspace }}/.stack
+  STACK_ROOT: ${{ github.workspace }}/.stack-work
 
 jobs:
 
@@ -30,9 +30,7 @@ jobs:
       - name: cache
         uses: actions/cache@v3
         with:
-          path: |
-            .stack-work/
-            ${{ env.STACK_ROOT }}
+          path: ${{ env.STACK_ROOT }}
           key: ${{ github.ref }}
 
       - name: build
