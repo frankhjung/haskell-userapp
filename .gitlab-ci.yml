@@ -8,15 +8,30 @@ build:
   stage: build
   except:
     - tags
-  image:
-    name: frankhjung/haskell:9.4.7
-    entrypoint: [""]
+  image: frankhjung/haskell:9.4.7
   variables:
     RTSOPTS: +RTS -N1 -s
     STACK_ROOT: ${CI_PROJECT_DIR}/.stack-work
   script:
-    - make clean check build test exec
+    - make setup clean check build test doc exec
+    - mv $(stack path --local-doc-root)/ public/
+  artifacts:
+    paths:
+      - public
   cache:
     key: ${CI_COMMIT_REF_NAME}
     paths:
-      - .stack-work/
+      - ${STACK_ROOT}
+
+pages:
+  stage: deploy
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  image: alpine:latest
+  script:
+    - echo Publishing documentation ...
+  dependencies:
+    - build
+  artifacts:
+    paths:
+      - public

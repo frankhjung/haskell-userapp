@@ -1,3 +1,4 @@
+{-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 {-|
@@ -43,8 +44,7 @@ go u p = display (Username username) (Password password)
 -- stack exec -- main [username] [password]
 -- @
 main :: IO ()
-main = do
-  args <- getArgs
-  case args of
+main = getArgs >>=
+  \case
     [username, password] -> go username password
     _                    -> putStrLn $ unlines usage

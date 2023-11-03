@@ -3,9 +3,4 @@ resolver: lts-21.14
 arch: x86_64
 packages: ["."]
 allow-newer: true
-ghc-options:
-  "$everything": -O2
-  "$locals": -Wall
-  "$targets": -Werror
-extra-deps:
-  - validation-1.1.2
+extra-deps: [validation-1.1.2]

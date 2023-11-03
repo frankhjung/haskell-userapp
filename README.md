@@ -8,15 +8,20 @@ Chris Martin.
 
 To install dependencies
 
-  - HUnit (use Cabal to install)
-  - text
-  - validation
+- HUnit (use Cabal to install)
+- text
+- validation
 
-Run:
+To build, test and run call:
 
 ```bash
-make setup build
+make setup default
 ```
+
+### Note
+
+`validation` is not part of the stanard LTS release so must explicitly be in
+`stack.yaml`.
 
 ## GHCi
 
@@ -84,5 +89,5 @@ type Rule a = (a -> Validation Error a)
 
 ## References
 
-- https://leanpub.com/finding-success-in-haskell
-- https://github.com/matt-noonan/gdp-paper/
+- <https://leanpub.com/finding-success-in-haskell>
+- <https://github.com/matt-noonan/gdp-paper/>

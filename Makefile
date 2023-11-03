@@ -1,37 +1,52 @@
 #!/usr/bin/env make
 
-.PHONY:	all build check clean cleanall default exec ghci lint setup style tags test
+.DEFAULT_GOAL := default
 
 SRC	:= $(wildcard *.hs */*.hs)
+TARGET	:= UserApp
 
-default:	format check build test exec
+.PHONY: default
+default: format check build test exec
 
-all:	format check build test exec
+.PHONY: all
+all:	format check build test doc exec
 
+.PHONY: format
 format:	$(SRC)
 	@echo format ...
-	@stylish-haskell --config=.stylish-haskell.yaml --inplace $(SRC)
-	@cabal-fmt --inplace UserApp.cabal
+	@cabal-fmt --inplace $(TARGET).cabal
+	@stylish-haskell --verbose --inplace $(SRC)
 
+.PHONY: check
 check:	tags lint
 
+.PHONY: tags
 tags:	$(SRC)
 	@echo tags ...
 	@hasktags --ctags --extendedctag $(SRC)
 
+.PHONY: lint
 lint:	$(SRC)
 	@echo lint ...
 	@cabal check --verbose
 	@hlint --cross --color --show $(SRC)
 
+.PHONY: build
 build:
 	@echo build ...
-	@stack build --pedantic
+	@stack build --pedantic --no-test
 
+.PHONY: test
 test:
 	@echo test ...
-	@stack test
+	@stack test --fast
 
+.PHONY: doc
+doc:
+	@echo doc ...
+	@stack haddock
+
+.PHONY: exec
 exec:
 	@echo
 	@echo run with good parameters ...
@@ -40,23 +55,23 @@ exec:
 	@echo run with bad parameters ...
 	stack exec -- main 'test%user' 'test@password'
 
+.PHONY: setup
 setup:
 	stack update
 	stack path
 	stack query
 	stack ls dependencies
 
+.PHONY: ghci
 ghci:
 	@stack ghci --ghci-options -Wno-type-defaults
 
+.PHONY: clean
 clean:
 	@stack clean
 	@cabal clean
-	@rm -f tags
-	@rm -f $(wildcard *.hi **/*.hi)
-	@rm -f $(wildcard *.o **/*.o)
-	@rm -f $(wildcard *.prof **/*.prof)
-	@rm -f $(wildcard *.tix **/*.tix)
 
+.PHONY: cleanall
 cleanall: clean
 	@stack purge
+	@rm -f tags

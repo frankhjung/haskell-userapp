@@ -38,3 +38,6 @@ jobs:
 
       - name: test
         run: stack test --coverage
+
+      - name: exec
+        run: stack exec -- main testuser testpassword
